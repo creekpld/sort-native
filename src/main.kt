@@ -2,9 +2,8 @@
 
 import ncurses.*
 import platform.osx.lines_of_memory
-import platform.posix.getpid
-import platform.posix.sleep
-import platform.posix.usleep
+import platform.posix.*
+import kotlin.random.Random
 
 /**
 ▀ ▁ ▂ ▃ ▄ ▅ ▆ ▇ █ ▉ ▊ ▋ ▌ ▍ ▎ ▏ ▐ ░ ▒ ▓ ▔ ▕ ▖ ▗ ▘ ▙ ▚ ▛ ▜ ▝ ▞ ▟
@@ -22,12 +21,27 @@ import platform.posix.usleep
 fun main(args: Array<String>) {
 
     //println("Hello, World! From PID: ${getpid()}")
+    val items = 20
+    val rng = Random(123)
 
-    val values = arrayOf(8,10,7,9,1,6,5,2,4,3)
+    // use random values
+    //val values = Array(items) { rng.nextInt(1, items) }
+
+    // use shuffled values
+    val values = Array(items) {it + 1}
+        .toList()
+        .shuffled(rng)
+        .toTypedArray()
+
+    // Set locale for ncurses wide character (UTF-8) support.
+    // setlocale, Passing "" results in getting the configured/system locale,
+    // which should be UTF-8 based on any modern system.
+    // Note: The call to setlocale must precede initscr().
+    setlocale(LC_ALL, "")
 
     initscr()
 
-    val window = newwin(22, 42, 0, 0)
+    val window = newwin(24, 84, 0, 0)
     box(window, 0 ,0)
 
     fun drawGraph(array: Array<Int>, activeValue: Int){
@@ -41,20 +55,17 @@ fun main(args: Array<String>) {
                 row = j
                 line += if (array[j] >= i){
                     if (activeValue == j) {
-                        ": "
+                        "░ "
                     } else {
-                        "I "
+                        "█ "
                     }
                 }else{
                     "  "
                 }
             }
             // draw line
-            mvwprintw(window,
-                array.max()!! * 2 - i,
-                row * 2,
-                line
-            )
+            mvwprintw(window, (array.max()!! - (i-2)), row, line)
+
             wrefresh(window)
         }
 
