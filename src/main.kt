@@ -19,7 +19,7 @@ import kotlin.random.Random
  */
 fun main(args: Array<String>) {
 
-    val items = 30              // items/values in the array to sort, aka. the rows in the graph
+    val items = 30              // items/values in the array to sort, aka. the columns in the graph
     val delay = 100000U         // delay per sort step in microsecond (μs)
     val rng = Random(123)  // random number generator for shuffling the array values
 
@@ -51,10 +51,10 @@ fun main(args: Array<String>) {
         // Lines
         for (i in 0..(array.max()!!)) {
             var line = ""
-            var row = 0
-            // Rows
+            var column = 0
+            // columns
             for (j in array.indices) {
-                row = j
+                column = j
                 line += "█░"
             }
             // draw line
@@ -72,10 +72,10 @@ fun main(args: Array<String>) {
         // Lines
         for (i in 0..(array.max()!!)) {
             var line = ""
-            var row = 0
-            // Rows
+            var column = 0
+            // columns
             for (j in array.indices) {
-                row = j
+                column = j
                 line += if (array[j] >= i) {
                     if (activeValue == j) {
                         "░ "
